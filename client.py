@@ -13,6 +13,7 @@ class MyHandler(FileSystemEventHandler):
             msg = f"Se ha creado un archivo: {event.src_path}"
         
         self.__msg = msg
+        print(self.__msg)
 
     @property
     def message(self):
@@ -35,6 +36,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
     try:
         while True:
             data_server = client.recv(1024)
+            print(data_server)
             if not data_server:
                 break
 
