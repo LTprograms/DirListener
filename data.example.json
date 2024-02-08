@@ -1,0 +1,11 @@
+{
+
+    "directory" : "C:/Users/usuario/Pictures/Screenshots",
+    "transmitter" : "transmitter@gmail.com",
+    "password" : "jsal iewp kfjs nsqj",
+    "message" : {
+        "from" : "transmitter",
+        "to" : "receiver"
+    },
+    "receiver" : "receiver@gmail.com"
+}
