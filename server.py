@@ -29,4 +29,21 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
                 data = connection.recv(1024)
                 if not data:
                     break 
-                print(f"Datos recibidos: {data.decode('utf-8')}")
+                # EMAIL INFO
+                message = MIMEMultipart()
+                message["From"] = data_send["message"]["from"]
+                message["To"] = data_send["message"]["to"]
+                message["Subject"] = f"Cambios en {data_send['directory']}"
+
+                smtp_server = "smtp.gmail.com"
+                smtp_port = 587
+                smtp_username = data_send["transmitter"]
+                smtp_password = data_send["password"]
+                receiver = data_send["receiver"]
+                
+                message.attach(MIMEText(data.decode('utf-8'), "plain"))
+                with smtplib.SMTP(smtp_server, smtp_port) as server:
+                    # SEND EMAIL
+                    server.starttls()
+                    server.login(smtp_username, smtp_password)
+                    server.sendmail(smtp_username, receiver, message.as_string())
