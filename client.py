@@ -25,11 +25,7 @@ host = '192.168.1.19'
 port = 12345
 
 # WATCHDOG LISTENER
-event_handler = MyHandler()
-observer = Observer()
-# observer.schedule(event_handler, path=directory, recursive=True)
 
-observer.start()
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
     client.connect((host, port))
@@ -42,11 +38,17 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
 
             data = json.loads(data_server.decode('utf-8'))
             directory = data["directory"]
+
+            event_handler = MyHandler()
+            observer = Observer()
+            # observer.schedule(event_handler, path=directory, recursive=True)
+
+            observer.start()
             
             observer.schedule(event_handler, path=directory, recursive=True)
 
             client.sendall(event_handler.message.encode('utf-8'))
-
+            print(f"Enviado: {event_handler.message}")
             event_handler.set_msg("")
             
     except KeyboardInterrupt:
