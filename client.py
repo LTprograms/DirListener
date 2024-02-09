@@ -16,6 +16,7 @@ class MyHandler(FileSystemEventHandler):
 
 # Configuración del cliente
 host = '192.168.1.19'
+# host = '192.168.1.1'
 port = 12345
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
