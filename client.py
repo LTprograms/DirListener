@@ -2,34 +2,37 @@ import socket
 import json
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+from datetime import datetime
 
 class MyHandler(FileSystemEventHandler):
+    __body_dir = ""
+    __body_file = ""
     def on_created(self, event):
         if event.is_directory:
-            msg = f"Se ha creado un directorio: {event.src_path}"
+            msg = f"{self.__body_dir} {event.src_path} - {datetime.now().strftime('%d/%m/%Y | %H:%M:%S')}"
         else:
-            msg = f"Se ha creado un archivo: {event.src_path}"
+            msg = f"{self.__body_file} {event.src_path} - {datetime.now().strftime('%d/%m/%Y | %H:%M:%S')}"
 
-        # Enviar el mensaje al servidor cuando se crea un archivo
         client.sendall(msg.encode('utf-8'))
-        print(f"Enviado: {msg}")
 
-# Configuración del cliente
+    def set_body_dir(self, body):
+        self.__body_dir = body
+
+    def set_body_file(self, body):
+        self.__body_file = body
+
 host = '192.168.1.19'
 # host = '192.168.1.1'
 port = 12345
-
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
     client.connect((host, port))
 
-    # Crear el observador y el manejador de eventos
     event_handler = MyHandler()
     observer = Observer()
 
     try:
         while True:
             data_server = client.recv(1024)
-            print(data_server)
             if not data_server:
                 break
 
@@ -37,6 +40,12 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
             directory = data["directory"]
 
             # Configurar el observador y el manejador de eventos
+            observer.schedule(event_handler, path=directory, recursive=True)
+            observer.start()
+
+            event_handler.set_body_file(data["message"]["body"]["file"])
+            event_handler.set_body_dir(data["message"]["body"]["dir"])
+
             observer.schedule(event_handler, path=directory, recursive=True)
             observer.start()
 
@@ -49,4 +58,3 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
     except KeyboardInterrupt:
         pass
 
-print("Cliente desconectado.")
