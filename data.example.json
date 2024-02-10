@@ -1,11 +1,15 @@
 {
-
     "directory" : "C:/Users/usuario/Pictures/Screenshots",
     "transmitter" : "transmitter@gmail.com",
     "password" : "jsal iewp kfjs nsqj",
     "message" : {
         "from" : "transmitter",
-        "to" : "receiver"
+        "to" : "receiver",
+        "subject" : "Cambios en la carpeta",
+        "body" : {
+            "dir" : "A directory has been created: ",
+            "file" : "A file has been created: "
+        }
     },
     "receiver" : "receiver@gmail.com"
 }
