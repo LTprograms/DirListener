@@ -39,10 +39,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
             data = json.loads(data_server.decode('utf-8'))
             directory = data["directory"]
 
-            # Configurar el observador y el manejador de eventos
-            observer.schedule(event_handler, path=directory, recursive=True)
-            observer.start()
-
             event_handler.set_body_file(data["message"]["body"]["file"])
             event_handler.set_body_dir(data["message"]["body"]["dir"])
 
