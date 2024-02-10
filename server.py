@@ -33,7 +33,7 @@ try:
                     message = MIMEMultipart()
                     message["From"] = data_send["message"]["from"]
                     message["To"] = data_send["message"]["to"]
-                    message["Subject"] = f"Cambios en {data_send['directory']}"
+                    message["Subject"] = data_send["message"]["subject"]
 
                     smtp_server = "smtp.gmail.com"
                     smtp_port = 587
